@@ -4,7 +4,7 @@ A Python web scraping application that fetches Amazon's Best Sellers, serves the
 
 ### Amazon Best Sellers Parser & API
 
-This project is a comprehensive web scraping application designed to fulfill the requirements of a technical assessment for a Python Developer position. It automatically scrapes product data from Amazon's Best Sellers pages, serves this data through a RESTful API built with FastAPI, and presents it on an interactive web front-end.
+This project is a comprehensive web scraping application. It automatically scrapes product data from Amazon's Best Sellers pages, serves this data through a RESTful API built with FastAPI, and presents it on an interactive web front-end.
 
 #### Key Features:
 
