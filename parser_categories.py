@@ -20,11 +20,7 @@ def create_driver():
     options.add_argument('--disable-gpu')
     options.add_argument('--window-size=1920,1080')
     
-    # Опция для уменьшения "шума" в логах. Обернута в try-except для совместимости.
-    try:
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    except Exception:
-        pass
+    # !!! ПРОБЛЕМНАЯ СТРОКА УДАЛЕНА !!!
     
     return uc.Chrome(options=options)
 
