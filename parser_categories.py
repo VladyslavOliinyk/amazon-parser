@@ -13,14 +13,11 @@ def create_driver():
     user_agent = ua.random
     
     options.add_argument(f'--user-agent={user_agent}')
-    # Эти аргументы критически важны для работы в Docker-контейнере на Render
     options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-gpu')
     options.add_argument('--window-size=1920,1080')
-    
-    # !!! ПРОБЛЕМНАЯ СТРОКА УДАЛЕНА !!!
     
     return uc.Chrome(options=options)
 
@@ -35,22 +32,18 @@ def parse_single_category(category_name, category_url):
         driver = create_driver()
         driver.get(category_url)
         
-        delay = random.uniform(8, 13)
+        delay = random.uniform(9, 14) # Немного увеличим паузу для надежности
         print(f"  ...делаю паузу на {delay:.2f} сек...")
         time.sleep(delay)
         
         page_soup = BeautifulSoup(driver.page_source, 'html.parser')
         
-        # Находим главный список, в котором лежат ВСЕ товары.
         product_list = page_soup.select_one('ol.a-ordered-list')
-        
         if not product_list:
             print(f"  ❌ Не удалось найти общий список товаров (ol.a-ordered-list) для '{category_name}'.")
             return []
 
-        # Внутри этого списка находим ВСЕ элементы-карточки.
         product_cards = product_list.select('li.zg-no-numbers')
-        
         if not product_cards:
             print(f"  ❌ Не удалось найти карточки товаров (li.zg-no-numbers) для '{category_name}'.")
             return []
@@ -88,44 +81,20 @@ def parse_single_category(category_name, category_url):
 
 def run_parser():
     """
-    Главная функция-оркестратор. Собирает URL категорий, а затем
-    в цикле запускает парсер для каждой из них.
+    Главная функция-оркестратор. Использует жестко заданный список категорий
+    для максимальной надежности и экономии памяти.
     """
-    main_driver = None
-    categories_to_parse = []
-    try:
-        print("ЭТАП 1: Запуск главного драйвера для сбора ссылок...")
-        main_driver = create_driver()
-        main_driver.get("https://www.amazon.com/gp/bestsellers")
-        time.sleep(random.uniform(5, 8))
-        main_driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(random.uniform(2, 4))
-
-        soup = BeautifulSoup(main_driver.page_source, 'html.parser')
-        
-        category_headers = soup.select('div.a-carousel-header-row')
-        
-        for header_block in category_headers:
-            name_el = header_block.select_one('h2.a-carousel-heading')
-            link_el = header_block.select_one('a[aria-label*="See More"]')
-            if name_el and link_el and link_el.get('href'):
-                categories_to_parse.append({
-                    'name': name_el.get_text(strip=True), 
-                    'url': "https://www.amazon.com" + link_el['href']
-                })
-        
-        print(f"ЭТАП 1 завершен. Найдено {len(categories_to_parse)} категорий.")
-    finally:
-        if main_driver:
-            main_driver.quit()
-            print("...главный драйвер для сбора ссылок закрыт.")
-
-    if not categories_to_parse:
-        print("Критическая ошибка: не удалось собрать URL категорий.", file=sys.stderr)
-        return False
-
-    # --- ЭТАП 2: Последовательный парсинг каждой категории ---
-    print("\nЭТАП 2: Начинаю последовательный обход страниц категорий...")
+    # Жестко заданный список категорий - это убирает необходимость в первом парсинге
+    categories_to_parse = [
+        {'name': 'Best Sellers in Automotive', 'url': 'https://www.amazon.com/gp/bestsellers/automotive/'},
+        {'name': 'Best Sellers in Electronics', 'url': 'https://www.amazon.com/gp/bestsellers/electronics/'},
+        {'name': 'Best Sellers in Clothing, Shoes & Jewelry', 'url': 'https://www.amazon.com/gp/bestsellers/fashion/'},
+        {'name': 'Best Sellers in Kitchen & Dining', 'url': 'https://www.amazon.com/gp/bestsellers/kitchen/'},
+        {'name': 'Best Sellers in Beauty & Personal Care', 'url': 'https://www.amazon.com/gp/bestsellers/beauty/'},
+        {'name': 'Best Sellers in Tools & Home Improvement', 'url': 'https://www.amazon.com/gp/bestsellers/hi/'},
+    ]
+    print(f"Начинаю парсинг {len(categories_to_parse)} предопределенных категорий...")
+    
     final_data = {}
     for category in categories_to_parse:
         products = parse_single_category(category['name'], category['url'])
