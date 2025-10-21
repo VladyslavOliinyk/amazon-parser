@@ -1,0 +1,418 @@
+/* =================================================================== */
+/* === 1. ОБЩАЯ НАСТРОЙКА: ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ ================ */
+/* =================================================================== */
+
+:root {
+  --bg: #f6f7f9;
+  --card: #fff;
+  --muted: #6b7280;
+  --accent: #ff9900;
+  --accent-dark: #e07b00;
+  --shadow: 0 6px 20px rgba(16,24,40,0.08);
+  --radius: 12px;
+  --max-width: 1200px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* Плавная прокрутка для якорных ссылок */
+  scroll-behavior: smooth;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: var(--font);
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding: 28px;
+  background: linear-gradient(160deg, #fff8e6 0%, #f6f7f9 50%, #fef6dd 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* =================================================================== */
+/* === 2. МАКЕТ И ОСНОВНЫЕ БЛОКИ ===================================== */
+/* =================================================================== */
+
+.wrapper {
+  width: 100%;
+  max-width: var(--max-width);
+}
+
+header {
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  color: #0f172a;
+}
+
+/* Общие стили для заголовков секций (H2) */
+.static-products-section h2,
+.daily-bestsellers-section h2 {
+  font-size: 20px;
+  color: #0f172a;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.scroll-down-nav {
+  text-align: center;
+  margin: 16px 0;
+}
+
+.section-divider {
+  margin: 40px 0;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ОБЪЕДИНЕННЫЕ СТИЛИ: Контейнеры для сеток товаров */
+#productsContainer,
+#bestsellersContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+}
+
+/* =================================================================== */
+/* === 3. КОМПОНЕНТЫ ================================================= */
+/* =================================================================== */
+
+/* --- Панели управления (фильтры и выбор категории) --- */
+.filters,
+.bestsellers-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+  align-items: center;
+  background: var(--card);
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+.filters label,
+.bestsellers-controls label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.filters select,
+.bestsellers-controls select {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: var(--card);
+  color: #111;
+  transition: 0.2s;
+}
+
+.filters select:hover,
+.bestsellers-controls select:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px rgba(255,153,0,0.4);
+}
+
+.bestsellers-controls select {
+  min-width: 250px;
+}
+
+
+/* --- Кнопки --- */
+.btn {
+  background: var(--accent);
+  color: #0f1111;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 0;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 6px; /* отступ между иконкой и текстом */
+}
+.btn:hover {
+  background: var(--accent-dark);
+  color: #fff;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+
+/* --- Карточки товаров --- */
+
+/* Общие стили для ВСЕХ карточек */
+.product-card,
+.bestseller-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 12px;
+  width: 213px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+}
+
+.product-card:hover,
+.bestseller-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(255, 185, 0, 0.5);
+  background: #fff8e6;
+}
+
+/* Общие стили для изображений в карточках */
+.product-card .image-box,
+.bestseller-card .image-box {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card .image-box img,
+.bestseller-card .image-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .image-box img,
+.bestseller-card:hover .image-box img {
+  transform: scale(1.06);
+}
+
+/* Общие стили для мета-информации (цена, рейтинг) */
+.product-card .row, .product-card .meta,
+.bestseller-card .row, .bestseller-card .meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+.product-card .row,
+.bestseller-card .row {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Уникальные стили для заголовков в РАЗНЫХ карточках */
+.product-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  height: 85px;  /* Было 102, но это слишком много для 2х строк */
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.bestseller-card {
+  position: relative; /* Необходимо для позиционирования значка */
+  overflow: hidden;
+}
+
+.bestseller-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 85px; /* Минимальная высота для 2х строк */
+  margin: 4px 0 0 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Ограничиваем 2-мя строками для консистентности */
+  -webkit-box-orient: vertical;
+}
+
+/* Уникальный элемент: значок с местом в топе */
+.bestseller-card .rank-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--accent);
+  color: #0f1111;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-bottom-right-radius: var(--radius);
+  z-index: 2;
+}
+
+
+/* --- Загрузчик (Spinner и Overlay) --- */
+#loaderOverlay, /* Этот ID не используется в новом коде, но оставлен для совместимости */
+#loader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.spinner {
+  border: 3px solid #ddd;
+  border-top: 3px solid var(--accent);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Прижимаем кнопку "View on Amazon" к низу карточки */
+.bestseller-card .btn {
+    margin-top: auto; /* Магическое свойство для flex-элементов */
+}
+
+/* =================================================================== */
+/* === 4. СТИЛИ ДЛЯ ИНТЕРАКТИВНЫХ ЭЛЕМЕНТОВ (ЗАДАНИЕ 3) ============== */
+/* =================================================================== */
+
+/* --- Заголовок секции с датой обновления --- */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+}
+
+.section-header h2 {
+  font-size: 20px;
+  color: #0f172a;
+  margin: 0;
+  border: none; /* Убираем дублирующуюся границу */
+  padding: 0;
+}
+
+#lastUpdatedText {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+  margin: 0;
+}
+
+/* --- Модальное окно и оверлей --- */
+.modal-overlay,
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  /* Убираем opacity и visibility, теперь управляем через display */
+  display: none; /* <-- ГЛАВНОЕ ИЗМЕНЕНИЕ: по умолчанию скрыты */
+}
+
+/* Этот блок больше не нужен, его можно удалить или оставить, он не будет мешать */
+/*
+.modal-overlay.visible,
+.loader-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+*/
+
+.modal-content,
+.loader-content {
+  background: var(--card);
+  padding: 24px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  /* Убираем анимацию, связанную с .visible */
+  /* transform: scale(0.95); */
+  /* transition: transform 0.3s ease; */
+}
+
+.modal-overlay.visible .modal-content,
+.loader-overlay.visible .loader-content {
+  transform: scale(1);
+}
+
+.modal-content h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #1e293b;
+}
+
+.modal-content p {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* --- Стили для кнопок в модальном окне --- */
+.btn.btn-secondary {
+  background: #e2e8f0;
+  color: #475569;
+}
+.btn.btn-secondary:hover {
+  background: #cbd5e1;
+  color: #1e293b;
+}
+
+/* --- Стили для оверлея загрузки --- */
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Увеличим спиннер для оверлея */
+.loader-content .spinner {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+

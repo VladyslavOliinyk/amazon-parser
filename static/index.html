@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Top Products</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- ===== ЭЛЕМЕНТЫ ОКНА ПОДТВЕРЖДЕНИЯ И ЗАГРУЗКИ (скрыты по умолчанию) ====== -->
+<!-- ============================================ -->
+<div id="confirmationModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h3>Confirm Update</h3>
+        <p>Are you sure you want to refresh the data? This process can take up to a minute, and the site will be locked.</p>
+        <div class="modal-actions">
+            <button id="cancelRefreshBtn" class="btn btn-secondary">Cancel</button>
+            <button id="confirmRefreshBtn" class="btn">Yes, Update</button>
+        </div>
+    </div>
+</div>
+
+<div id="loaderOverlay" class="loader-overlay" style="display: none;">
+    <div class="loader-content">
+        <div class="spinner"></div>
+        <span>Updating data... Please wait.</span>
+    </div>
+</div>
+
+
+<!-- ============================================ -->
+<!-- ============= ОСНОВНОЙ КОНТЕНТ ============= -->
+<!-- ============================================ -->
+<div class="wrapper">
+
+    <header>
+        <h1>Amazon Best Sellers Dashboard</h1>
+    </header>
+
+    <!-- ====== БЛОК ДЛЯ ЗАДАНИЯ 3 (Daily Best Sellers) ===== -->
+    <section id="daily-bestsellers-section" class="daily-bestsellers-section">
+        <div class="section-header">
+            <h2>Daily Best Sellers by Category</h2>
+            <p id="lastUpdatedText">Last updated: checking...</p>
+        </div>
+
+        <div class="bestsellers-controls">
+            <label>Choose a category:
+                <select id="categorySelect">
+                    <option value="">Loading categories...</option>
+                </select>
+            </label>
+            <button id="manualRefreshBtn" class="btn">
+                <i class="fa-solid fa-sync-alt"></i>
+                Refresh Now
+            </button>
+        </div>
+
+        <div id="bestsellersContainer">
+            <!-- Сюда JS будет вставлять карточки -->
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ====== БЛОК ДЛЯ ЗАДАНИЙ 1 и 2 (старый функционал) ===== -->
+    <section class="static-products-section">
+        <h2>Top 5 from a Static Category</h2>
+        <div class="filters">
+            <label>Sort by:
+                <select id="sortSelect">
+                    <option value="rank">Rank</option>
+                    <option value="price">Price</option>
+                    <option value="rating">Rating</option>
+                </select>
+            </label>
+            <label>Order:
+                <select id="sortOrderSelect">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </label>
+            <label>Min rating:
+                <select id="minRatingSelect">
+                    <option value="0">All</option>
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
+                </select>
+            </label>
+        </div>
+
+        <div id="productsContainer">
+            <!-- Сюда JS вставляет старые карточки -->
+        </div>
+    </section>
+
+</div> <!-- .wrapper -->
+
+<script src="script.js"></script>
+</body>
+</html>
+
